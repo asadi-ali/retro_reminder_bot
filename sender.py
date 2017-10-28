@@ -6,11 +6,9 @@ from functions import *
 def main():
     """Start the bot."""
     updater = Updater("478708331:AAHjuX1suuValYW3ecbLus97WbGG4Xla3Z8")
-
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler("start", start))
-    conversation_handler = ConversationHandler(
+    add_command_handler = ConversationHandler(
         entry_points=[CommandHandler('add', start_add_reminder,
                                      pass_chat_data=True)],
         states={
@@ -25,7 +23,10 @@ def main():
         },
         fallbacks=[CommandHandler('cancel', cancel)]
     )
-    dp.add_handler(conversation_handler)
+
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("delete", delete, pass_chat_data=True))
+    dp.add_handler(add_command_handler)
     dp.add_error_handler(error)
 
     updater.start_polling()

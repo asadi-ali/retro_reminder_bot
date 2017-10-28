@@ -47,9 +47,9 @@ def _finalize_add_reminder(bot, job_queue, chat_data):
     job = job_queue.run_repeating(_reminder,
                                   interval=interval, first=first_time,
                                   context={'chat_id': chat_id, 'text': message})
-    if not chat_data.get('job'):
-        chat_data['job'] = []
-    chat_data['job'].append(job)
+    if not chat_data.get('jobs'):
+        chat_data['jobs'] = []
+    chat_data['jobs'].append(job)
 
 
 def start(_bot, update):
@@ -88,6 +88,15 @@ def cancel(bot, update):
     logger.info("User %s canceled the conversation.", user.first_name)
     bot.send_message(text='retro reminder addition canceled', chat_id=chat_id)
     return ConversationHandler.END
+
+
+def delete(bot, update, chat_data):
+    chat_id = update.message.chat_id
+    jobs = chat_data.pop('jobs')
+    for job in jobs:
+        job.schedule_removal()
+    bot.send_message(text='All reminder messages has been deleted',
+                     chat_id=chat_id)
 
 
 def error(_bot, update, error_):
