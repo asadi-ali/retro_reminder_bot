@@ -1,11 +1,12 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 from functions import *
+from settings import ACCESS_TOKEN
 
 
 def main():
     """Start the bot."""
-    updater = Updater("478708331:AAHjuX1suuValYW3ecbLus97WbGG4Xla3Z8")
+    updater = Updater(ACCESS_TOKEN)
     dp = updater.dispatcher
 
     add_command_handler = ConversationHandler(
